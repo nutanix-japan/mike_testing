@@ -27,14 +27,16 @@ jobs:
         with:
           python-version: 3.x
           cache: 'pip' # Built-in pip caching is faster than manual actions/cache
+      
+      - run: pip install -r requirements.txt
 
-      - name: Install dependencies
-        run: |
-          pip install mkdocs-material[imaging] mike termynal \
-                      mkdocs-git-authors-plugin \
-                      mkdocs-git-revision-date-localized-plugin \
-                      mkdocs-git-committers-plugin-2 \
-                      markdown-grid-tables
+      # - name: Install dependencies
+      #   run: |
+      #     pip install mkdocs-material[imaging] mike termynal \
+      #                 mkdocs-git-authors-plugin \
+      #                 mkdocs-git-revision-date-localized-plugin \
+      #                 mkdocs-git-committers-plugin-2 \
+      #                 markdown-grid-tables
 
       - name: Deploy with mike
         run: |

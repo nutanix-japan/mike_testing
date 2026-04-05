@@ -4,7 +4,7 @@ For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
 ## Version 
 
-The version is ``0.3``
+The version is ``0.4``
 
 ## Commands
 
