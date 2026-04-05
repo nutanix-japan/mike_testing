@@ -1,0 +1,48 @@
+name: ci
+on:
+  push:
+    branches:
+      - master
+      - main
+    tags:
+      - '*' # Trigger on version tags (e.g. v1.0)
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # REQUIRED: Mike needs full history to manage versions
+
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+          cache: 'pip' # Built-in pip caching is faster than manual actions/cache
+
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material[imaging] mike termynal \
+                      mkdocs-git-authors-plugin \
+                      mkdocs-git-revision-date-localized-plugin \
+                      mkdocs-git-committers-plugin-2 \
+                      markdown-grid-tables
+
+      - name: Deploy with mike
+        run: |
+          # If it's a tag (e.g. 0.1), deploy that version and update 'latest'
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            mike deploy --push --update-aliases ${GITHUB_REF_NAME} latest
+          # If it's just a push to main, update the 'dev' version
+          else
+            mike deploy --push dev
+          fi
+          mike set-default --push latest
