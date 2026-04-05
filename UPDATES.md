@@ -18,6 +18,12 @@ Now, make another change and publish a new version:
 mike deploy --push --update-aliases 0.2 latest
 ```
 
+# Retitling
+
+```bash
+mike retitle --push 0.4 "NAI 0.4"
+```
+
 # Git updates to view with MIKE
 
 1. Daily Updates (The "Dev" version)

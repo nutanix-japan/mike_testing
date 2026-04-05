@@ -30,21 +30,13 @@ jobs:
       
       - run: pip install -r requirements.txt
 
-      # - name: Install dependencies
-      #   run: |
-      #     pip install mkdocs-material[imaging] mike termynal \
-      #                 mkdocs-git-authors-plugin \
-      #                 mkdocs-git-revision-date-localized-plugin \
-      #                 mkdocs-git-committers-plugin-2 \
-      #                 markdown-grid-tables
-
       - name: Deploy with mike
         run: |
-          # If it's a tag (e.g. 0.1), deploy that version and update 'latest'
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-            mike deploy --push --update-aliases ${GITHUB_REF_NAME} latest
-          # If it's just a push to main, update the 'dev' version
+            # Tagged Release: Folder=0.4, Title="NAI 0.4", Alias=latest
+            mike deploy --push --update-aliases ${GITHUB_REF_NAME} latest -t "NAI ${GITHUB_REF_NAME}"
+            mike set-default --push latest
           else
-            mike deploy --push dev
+            # Push to main: Folder=dev, Title="Development"
+            mike deploy --push dev -t "Development"
           fi
-          mike set-default --push latest
